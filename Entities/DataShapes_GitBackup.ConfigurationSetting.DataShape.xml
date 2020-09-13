@@ -110,6 +110,13 @@
                  description=""
                  name="User"
                  ordinal="0"></FieldDefinition>
+                <FieldDefinition
+                 aspect.defaultValue="electric"
+                 aspect.friendlyName="Nested File Repository Path"
+                 baseType="STRING"
+                 description=""
+                 name="NestedRepoPathName"
+                 ordinal="14"></FieldDefinition>
             </FieldDefinitions>
         </DataShape>
     </DataShapes>

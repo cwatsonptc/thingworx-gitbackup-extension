@@ -1,2 +1,4 @@
 bin
 build
+
+twx-lib/thingworx-ext-sdk*.jar

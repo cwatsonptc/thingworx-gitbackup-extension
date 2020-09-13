@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
  build="b103"
- majorVersion="8"
- minorVersion="5"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
- revision="5"
- schemaVersion="1054"
+ majorVersion="9"
+ minorVersion="0"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
+ revision="1"
+ schemaVersion="1100"
  universal="password">
     <DataShapes>
         <DataShape
@@ -15,7 +15,7 @@
          description=""
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-08-28T06:23:46.159-07:00"
+         lastModifiedDate="2020-09-10T14:16:21.597+01:00"
          name="GitBackup.Configuration.DataShape"
          projectName="GitBackup"
          tags="">
@@ -50,6 +50,18 @@
                  aspect.isPrimaryKey="false"
                  baseType="STRING"
                  description=""
+                 name="DataExportPath"
+                 ordinal="16"></FieldDefinition>
+                <FieldDefinition
+                 aspect.isPrimaryKey="false"
+                 baseType="STRING"
+                 description=""
+                 name="EntityExportPath"
+                 ordinal="15"></FieldDefinition>
+                <FieldDefinition
+                 aspect.isPrimaryKey="false"
+                 baseType="STRING"
+                 description=""
                  name="FileRepoPath"
                  ordinal="2"></FieldDefinition>
                 <FieldDefinition
@@ -76,6 +88,12 @@
                  description=""
                  name="LocalizationTokensPrefix"
                  ordinal="13"></FieldDefinition>
+                <FieldDefinition
+                 aspect.isPrimaryKey="false"
+                 baseType="STRING"
+                 description=""
+                 name="NestedFileRepoPath"
+                 ordinal="14"></FieldDefinition>
                 <FieldDefinition
                  aspect.isPrimaryKey="false"
                  baseType="STRING"

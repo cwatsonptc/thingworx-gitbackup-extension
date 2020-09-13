@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Entities
  build="b103"
- majorVersion="8"
- minorVersion="5"
- modelPersistenceProviderPackage="PostgresPersistenceProviderPackage"
- revision="5"
- schemaVersion="1054"
+ majorVersion="9"
+ minorVersion="0"
+ modelPersistenceProviderPackage="H2PersistenceProviderPackage"
+ revision="1"
+ schemaVersion="1100"
  universal="password">
     <ThingShapes>
         <ThingShape
@@ -15,10 +15,10 @@
          description="This Utility shape is used to add useful javascript functionality to the GitBackup Things, which are built in Java."
          documentationContent=""
          homeMashup=""
-         lastModifiedDate="2020-08-31T04:57:13.486-07:00"
+         lastModifiedDate="2020-09-10T14:57:42.850+01:00"
          name="Git.Utility.ThingShape"
          projectName="GitBackup"
-         tags="">
+         tags="PTC:GitUtils">
             <PropertyDefinitions>
                 <PropertyDefinition
                  aspect.cacheTime="0.0"
@@ -33,6 +33,57 @@
                  ordinal="2"></PropertyDefinition>
             </PropertyDefinitions>
             <ServiceDefinitions>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description="Delete any existing files"
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="DeleteExistingEntities">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="ProjectName"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description="Delete any existing files and folders inside path"
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="DeleteExistingFiles">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="THINGNAME"
+                         description=""
+                         name="FileRepoName"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description=""
+                         name="Path"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
                  category=""
@@ -168,6 +219,82 @@
                  isLocalOnly="false"
                  isOpen="false"
                  isPrivate="false"
+                 name="GetProjectNameFromGit">
+                    <ResultType
+                     baseType="STRING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description="Optional project name - if provided will be used instead of the GIT name (e.g. if no commit has happened at all yet"
+                         name="ProjectName"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description="Wrapper for the ImportToSourceControl service."
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ImportProjectEntities">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="ImportProjectEntitiesFromGit">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description="Move the exported files to a desired export location if it's not the defaults"
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="MoveEntitiesToExportFilePath">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="ProjectName"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
                  name="QueryDiffFileList">
                     <ResultType
                      aspect.dataShape="GitBackup.CommitChangedFiles.DataShape"
@@ -241,7 +368,13 @@
                      description=""
                      name="result"
                      ordinal="0"></ResultType>
-                    <ParameterDefinitions></ParameterDefinitions>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="ProjectName"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
                 </ServiceDefinition>
                 <ServiceDefinition
                  aspect.isAsync="false"
@@ -275,6 +408,91 @@
                      ordinal="0"></ResultType>
                     <ParameterDefinitions></ParameterDefinitions>
                 </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category="Git"
+                 description="Set the identity of the current user"
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="SetIdentity">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         aspect.defaultValue="Master"
+                         baseType="STRING"
+                         description="Branch name - Must be Base64 Encoded."
+                         name="branch"
+                         ordinal="5"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="false"
+                         baseType="STRING"
+                         description="Set the commit user, if not provided then the value of user is used.  Must be Base64 Encoded."
+                         name="commitEmail"
+                         ordinal="3"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description="User name for commit logs - Must be Base64 Encoded."
+                         name="commitUser"
+                         ordinal="4"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description="Git password - currently passed as  be Base64 Encoded plain text."
+                         name="password"
+                         ordinal="2"></FieldDefinition>
+                        <FieldDefinition
+                         aspect.isRequired="true"
+                         baseType="STRING"
+                         description="User identity to login to server.  Must be Base64 Encoded."
+                         name="user"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="SetupFromGit">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions></ParameterDefinitions>
+                </ServiceDefinition>
+                <ServiceDefinition
+                 aspect.isAsync="false"
+                 category=""
+                 description=""
+                 isAllowOverride="false"
+                 isLocalOnly="false"
+                 isOpen="false"
+                 isPrivate="false"
+                 name="UpdateProjectInGit">
+                    <ResultType
+                     baseType="NOTHING"
+                     description=""
+                     name="result"
+                     ordinal="0"></ResultType>
+                    <ParameterDefinitions>
+                        <FieldDefinition
+                         baseType="STRING"
+                         description=""
+                         name="Comments"
+                         ordinal="1"></FieldDefinition>
+                    </ParameterDefinitions>
+                </ServiceDefinition>
             </ServiceDefinitions>
             <EventDefinitions></EventDefinitions>
             <ServiceMappings></ServiceMappings>
@@ -282,9 +500,118 @@
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
+                 name="DeleteExistingEntities">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var ProjectName = me.GetProjectNameFromGit({
+                                        ProjectName: ProjectName
+                                    });
+                                    //1. Initialize the Repository name and subfolder needed for subsequent operations
+                                    var cfg =  me.GetConfiguration();
+                                    
+                                    var path = cfg[0].NestedFileRepoPath;
+                                    var entityExpPath = cfg[0].EntityExportPath;
+                                    var repoName = cfg[0].FileRepository;
+                                    
+                                    if (entityExpPath && entityExpPath.length > 0) {
+                                        path = path + entityExpPath;
+                                    } else {
+                                        path = path + "/" + localProjectName;
+                                    }
+                                    me.DeleteExistingFiles({
+                                        Path: path,
+                                        FileRepoName : repoName
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="DeleteExistingFiles">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var FileRepo = Things[FileRepoName];
+                                    var folders = FileRepo.ListDirectories({
+                                        path: Path
+                                    });
+                                    if(folders && folders.rows.length > 0) {
+                                        for(var i = 0; i < folders.rows.length; i++) {
+                                            var folder = folders.rows[i];
+                                            me.DeleteExistingFiles({
+                                                Path: folder.path,
+                                                FileRepoName: FileRepoName
+                                        });
+                                    }
+                                                                    }
+                                    var files =  FileRepo.ListFiles({
+                                        path: Path
+                                    });
+                                    if(files && files.rows.length > 0) {
+                                        for(var j = 0; j < files.rows.length; j++) {
+                                            var file = files.rows[j];
+                                            FileRepo.DeleteFile({
+                                                path: file.path
+                                            });
+                                        }
+                                    }
+                                    FileRepo.DeleteFolder({
+                                      path: Path
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
                  name="ExportLocalizationToken">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description=""
                          isMultiRow="false"
                          name="Script"
@@ -303,7 +630,6 @@
                                     <code>
                                     <![CDATA[
                                     //Created by Tanguy Parmentier / PTC
-                                    
                                     //1. Initialize the Repository name and subfolder needed for subsequent operations
                                     var iftbl_Config = me.GetConfiguration();
                                     var strRepo = iftbl_Config.FileRepository;
@@ -442,6 +768,7 @@
                  name="ExportProjectData">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description=""
                          isMultiRow="false"
                          name="Script"
@@ -459,6 +786,10 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var ProjectName = me.GetProjectNameFromGit({
+                                        ProjectName: ProjectName
+                                    });
+                                    
                                     var params_DataTables = {
                                         searchExpression: "*" /* STRING */ ,
                                         types: {
@@ -569,10 +900,16 @@
                                                 tags: "Applications:" + ProjectName
                                             });
                                     }
+                                    var tgtPath = iftbl_ConfigurationRow.NestedFileRepoPath;
+                                    var dataExpPath =  ftbl_ConfigurationRow.DataExportPath;
+                                    if (dataExpPath && dataExpPath.length > 0) {
+                                        thtPath = tgtPath + dataExpPath;
+                                    }
+                                    
                                     //we get configuration data
                                     var iftbl_ConfigurationRow = me.GetConfiguration().getRow(0);
                                     var target = Things["ExtensionImportTargets"].importTargets.getRow(0);
-                                    var ExportURL = target.baseURL + "/DataExporter?Accept=" + encodeURIComponent("application/octet-stream") + "&path=" + encodeURIComponent(iftbl_ConfigurationRow.FileRepoPath) + "&repositoryName=" + encodeURIComponent(iftbl_ConfigurationRow.FileRepository) + "&searchTags=" + encodeURIComponent("Applications:" + ProjectName);
+                                    var ExportURL = target.baseURL + "/DataExporter?Accept=" + encodeURIComponent("application/octet-stream") + "&path=" + encodeURIComponent(thtPath) + "&repositoryName=" + encodeURIComponent(iftbl_ConfigurationRow.FileRepository) + "&searchTags=" + encodeURIComponent("Applications:" + ProjectName);
                                     var params2 = {
                                         headers: {
                                             "appKey": target.appKey
@@ -610,6 +947,7 @@
                  name="ExportProjectEntities">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description=""
                          isMultiRow="false"
                          name="Script"
@@ -627,6 +965,9 @@
                                 <Row>
                                     <code>
                                     <![CDATA[
+                                    var ProjectName = me.GetProjectNameFromGit({
+                                        ProjectName: ProjectName
+                                    });
                                     //Proceed only if the input parameters are valid
                                     var str_tempExportFolder = "a" + dateFormat(new Date(), "yyyyMMddHHmmss");
                                     
@@ -649,8 +990,8 @@
                                     	//1. Get the configuration parameters that are needed as input for the ExportSourceControlledEntities
                                     	var iftbl_Config = me.GetConfiguration();
                                     	Resources["SourceControlFunctions"].ExportSourceControlledEntities({
-                                    		path: iftbl_Config.FileRepoPath,
-                                    		includeDependents: includeDependents,
+                                    					        path: iftbl_Config.FileRepoPath,
+                                        	                                    	includeDependents: includeDependents,
                                     		repositoryName: iftbl_Config.FileRepository,
                                     		projectName: ProjectName
                                     	});
@@ -662,6 +1003,10 @@
                                     //4. Remove the modelPersistenceProviderPackage; this is useful when you are working in the same version but different persistence providers are used;
                                     me.RemoveModelPersistenceProviderPackage();
                                     //ThingWorx imports files which do not have this attribute (verified in 8.5.4)
+                                     // 4a. Move the files to the ExportFilePath
+                                                      me.MoveEntitiesToExportFilePath({
+                                          ProjectName: ProjectName /* STRING */
+                                        });
                                     //5. Remove the ConfigurationTableDefinitions - ONLY ACTIVATE FOR 8.2
                                     //me.RemoveConfigurationTableDefinitions();
                                     //6. Remove the mashup preview tag - ONLY ACTIVATE FOR 8.2
@@ -759,6 +1104,7 @@
                  name="ExportProjectExtensions">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description=""
                          isMultiRow="false"
                          name="Script"
@@ -795,6 +1141,7 @@
                  name="GetConfiguration">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description=""
                          isMultiRow="false"
                          name="Script"
@@ -821,6 +1168,9 @@
                                     
                                     var row= iftbl_Cfg.getRow(0);
                                     var newEntry = new Object();
+                                    newEntry.NestedFileRepoPath = row.NestedRepoPathName; // STRING
+                                    newEntry.EntityExportPath = "/src/main/twx";
+                                    newEntry.DataExportPath = "/src/main/twxdata";
                                     newEntry.FileRepoPath = row.RepoPathName; // STRING
                                     newEntry.User = row.User; // STRING
                                     newEntry.Password = row.Password; // STRING
@@ -844,6 +1194,7 @@
                  name="GetFilteredDirectoryListing">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description="Script"
                          isMultiRow="false"
                          name="Script"
@@ -865,6 +1216,7 @@
                                     
                                     var strRepo = cfg.FileRepository;
                                     var str_RepoPath = cfg.FileRepoPath;
+                                    var str_NestedRepoPath = cfg.NestedFileRepoPath;
                                     
                                     
                                     // result: INFOTABLE
@@ -886,9 +1238,213 @@
                 <ServiceImplementation
                  description=""
                  handlerName="Script"
+                 name="GetProjectNameFromGit">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var result;
+                                                         if (ProjectName != undefined && ProjectName.length > 0) {
+                                                           result = ProjectName;    
+                                                         } else {
+                                                           var config =  me.GetConfiguration()[0];
+                                                           var fileRepo = Things[config.FileRepository];
+                                                           var path = config.NestedFileRepoPath + "/src/main/twx/Projects";
+                                    
+                                                           try {
+                                                             var projectFile =  fileRepo.GetFileListing({
+                                                               path: path /* STRING */,
+                                                               nameMask: "*.xml" /* STRING */
+                                                             });
+                                                             if (projectFile != undefined && projectFile.length > 0) {
+                                                               var pfName = projectFile.getRow(0).name;
+                                                               result = pfName.substring(0, pfName.length - 4);
+                                                            }
+                                                          } catch(err) {
+                                                            // No such file - so ignore
+                                                            // Presumably it's not been pulled yet
+                                                          }
+                                                        }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ImportProjectEntities">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    logger.warn("Started importing source controlled entities");
+                                        //1. Get the configuration parameters that are needed as input for the ExportSourceControlledEntities
+                                        var iftbl_Config = me.GetConfiguration();
+                                        var path = iftbl_Config[0].NestedFileRepoPath;
+                                        var entityExpPath = iftbl_Config[0].EntityExportPath;
+                                        var repoName = iftbl_Config[0].FileRepository;
+                                    
+                                        //2. Do the Import - this is async unfortunatly
+                                        Resources["SourceControlFunctions"].ImportSourceControlledEntities({
+                                          path: iftbl_Config.NestedFileRepoPath + entityExpPath,
+                                          repositoryName: iftbl_Config.FileRepository
+                                        });
+                                        logger.warn("Finished importing source controlled entities");
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="ImportProjectEntitiesFromGit">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    me.Pull({
+                                      Force: true /* BOOLEAN */
+                                    });
+                                    pause(2000);
+                                    
+                                    me.ImportProjectEntities();
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="MoveEntitiesToExportFilePath">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description="Script"
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    var ProjectName = me.GetProjectNameFromGit({
+                                        ProjectName: ProjectName
+                                    });
+                                    //1. Initialize the Repository name and subfolder needed for subsequent operations
+                                    var cfg =  me.GetConfiguration();
+                                    
+                                    var path = cfg[0].FileRepoPath;
+                                    var nestedPath = cfg[0].NestedFileRepoPath;
+                                    var entityExpPath = cfg[0].EntityExportPath;
+                                    var repoName = cfg[0].FileRepository;
+                                    
+                                    if (entityExpPath && entityExpPath.length > 0) {
+                                       var foldersToMove =  Things[repoName].ListDirectories({
+                                           path: path +"/"+ProjectName /* STRING */
+                                       });
+                                       if(foldersToMove && foldersToMove.rows.length > 0) {
+                                            for(var i = 0; i < foldersToMove.rows.length; i++) {
+                                               var folder = foldersToMove.rows[i];
+                                    
+                                               var filesToMove =  Things[repoName].ListFiles({
+                                                   path: folder.path /* STRING */
+                                               });
+                                               if(filesToMove && filesToMove.rows.length >  0) {
+                                                   for(var j = 0; j < filesToMove.rows.length; j++) {
+                                                     var file = filesToMove.rows[j];
+                                                     Things[repoName].MoveFile({
+                                                         targetPath: nestedPath + entityExpPath + "/" + folder.name + "/" + file.name,
+                                                         overwrite: true,
+                                                         sourcePath: file.path
+                                                     });
+                                                  }
+                                               }
+                                           }
+                                           Things[repoName].DeleteFolder({
+                                               path: path + "/" + ProjectName
+                                           });
+                                       }
+                                    }
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
                  name="QueryDiffFileList">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description=""
                          isMultiRow="false"
                          name="Script"
@@ -942,6 +1498,7 @@
                  name="QueryStatus">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description="Script"
                          isMultiRow="false"
                          name="Script"
@@ -985,6 +1542,7 @@
                  name="RemoveConfigurationTableDefinitions">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description="Script"
                          isMultiRow="false"
                          name="Script"
@@ -1093,6 +1651,7 @@
                  name="RemoveLastModifiedDate">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description="Script"
                          isMultiRow="false"
                          name="Script"
@@ -1114,6 +1673,9 @@
                                     //in some cases this value was updated, but the actual content not, which led to "ghost" diffs showing in Git
                                     //should be called after expporting a project via the Main mashup UI finalized.
                                     //it is based on work by Moritz von Hasselbach (PTC)
+                                    var ProjectName = me.GetProjectNameFromGit({
+                                        ProjectName: ProjectName
+                                    });
                                     
                                     //1. Initialize the Repository name and subfolder needed for subsequent operations
                                     var cfg = me.GetConfigurationTable({
@@ -1121,6 +1683,18 @@
                                     });
                                     var strRepo = cfg.FileRepository;
                                     var str_RepoPath = cfg.RepoPathName;
+                                    
+                                    
+                                    function removeStr(text, str) {
+                                    	                                    //5.3.  Find the beginning index. This belongs to the first new line character _before_ lastModifiedDate (needed to delete the whole line)
+                                        var int_BeginIndex = str_XMLcontent.lastIndexOf("\n", str_XMLcontent.indexOf(str));
+                                        //5.4.  Find the ending index 
+                                        var int_EndIndexNL = str_XMLcontent.indexOf("\n", int_BeginIndex + 1);
+                                        var int_EndIndexTE = str_XMLcontent.indexOf(">", int_BeginIndex + 1);
+                                        var int_EndIndex = int_EndIndexNL > int_EndIndexTE ? int_EndIndexTE : int_EndIndexNL;
+                                        //5.5. Build the modified string via concatenating two strings
+                                        return str_XMLcontent.substring(0, int_BeginIndex) + str_XMLcontent.substring(int_EndIndex);
+                                    }
                                     
                                     //2. Declare recursive function that builds a list with all the XML files that are present in the subfolder corresponding to this GitBackup Thing.
                                     //It was not intended for Extensions or Data files.
@@ -1158,7 +1732,7 @@
                                     	dataShapeName: "FileSystemFile"
                                     });
                                     //4. Call the function defined above
-                                    GetFiles(str_RepoPath);
+                                    GetFiles(str_RepoPath +"/"+ProjectName);
                                     
                                     var int_modifiedCount=0;
                                     //5. For each of the files that we found, we load the txt content in memory, remove the line with lastModified date, and save them back
@@ -1168,21 +1742,21 @@
                                     	var str_XMLcontent = Things[strRepo].LoadText({
                                     		path: path
                                     	});
-                                    	//5.2. Find if the lastModifiedDate is present or not. If it's not present, assume that it was already removed, and do not proceed any further
-                                    	if (str_XMLcontent.indexOf("lastModifiedDate=\"") != -1) {
-                                    		//5.3.  Find the beginning index. This belongs to the first new line character _before_ lastModifiedDate (needed to delete the whole line)
-                                    		var int_BeginIndex = str_XMLcontent.lastIndexOf("\n", str_XMLcontent.indexOf("lastModifiedDate=\""));
-                                    		//5.4.  Find the ending index 
-                                    		var int_EndIndex = str_XMLcontent.indexOf("\n", int_BeginIndex + 1);
-                                    		//5.5. Build the modified string via concatenating two strings
-                                    		var str_modifiedXMLcontent = str_XMLcontent.substring(0, int_BeginIndex) + str_XMLcontent.substring(int_EndIndex);
+                                            //5.2. Find if the lastModifiedDate is present or not. If it's not present, assume that it was already removed, and do not proceed any further
+                                            // We assume that the other things we want to strip are also gone if lastModifiedDate is gone
+                                            if (str_XMLcontent.indexOf("lastModifiedDate=\"") != -1) {
+                                                var remove = [ "lastModifiedDate", "build", "majorVersion", "minorVersion", "modelPersistenceProviderPackage", "revision", "schemaVersion", "universal" ];
                                     
-                                    		//delete content..*.@lastModifiedDate; this e4x notation was used as a test initially with the Load and SaveXML functions.
-                                    		//5.6. Save the modified file
-                                    		Things[strRepo].SaveText({
-                                    			path: path,
-                                    			content: str_modifiedXMLcontent
-                                    		});
+                                                for (i = 0; i < remove.length; i++) {
+                                                    str_XMLcontent = removeStr(str_XMLcontent, remove[i]);
+                                                }
+                                                //delete content..*.@lastModifiedDate; this e4x notation was used as a test initially with the Load and SaveXML functions.
+                                                //5.6. Save the modified file
+                                                Things[strRepo].SaveText({
+                                                        path: path,
+                                                        content: str_XMLcontent
+                                                });
+                                    
                                             //5.7. Increment the modified file count for logging purposes
                                             int_modifiedCount++;
                                     	}
@@ -1202,6 +1776,7 @@
                  name="RemoveMashupPreviewTag">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description="Script"
                          isMultiRow="false"
                          name="Script"
@@ -1223,6 +1798,9 @@
                                     //in some cases this value was updated, but the actual content not, which led to "ghost" diffs showing in Git
                                     //should be called after expporting a project via the Main mashup UI finalized.
                                     //it is based on work by Moritz von Hasselbach (PTC)
+                                    var ProjectName = me.GetProjectNameFromGit({
+                                        ProjectName: ProjectName
+                                    });
                                     
                                     //1. Initialize the Repository name and subfolder needed for subsequent operations
                                     var cfg = me.GetConfigurationTable({
@@ -1267,7 +1845,7 @@
                                     	dataShapeName: "FileSystemFile"
                                     });
                                     //4. Call the function defined above
-                                    GetFiles(str_RepoPath);
+                                    GetFiles(str_RepoPath + "/" + ProjectName);
                                     
                                     var int_modifiedCount=0;
                                     //5. For each of the files that we found, we load the txt content in memory, remove the line with lastModified date, and save them back
@@ -1310,6 +1888,7 @@
                  name="RemoveModelPersistenceProviderPackage">
                     <ConfigurationTables>
                         <ConfigurationTable
+                         dataShapeName=""
                          description="Script"
                          isMultiRow="false"
                          name="Script"
@@ -1331,7 +1910,9 @@
                                     //in some cases this value was updated, but the actual content not, which led to "ghost" diffs showing in Git
                                     //should be called after expporting a project via the Main mashup UI finalized.
                                     //it is based on work by Moritz von Hasselbach (PTC)
-                                    
+                                    var ProjectName = me.GetProjectNameFromGit({
+                                        ProjectName: ProjectName
+                                    });
                                     //1. Initialize the Repository name and subfolder needed for subsequent operations
                                     var cfg = me.GetConfigurationTable({
                                     	tableName: "Configuration"
@@ -1375,7 +1956,7 @@
                                     	dataShapeName: "FileSystemFile"
                                     });
                                     //4. Call the function defined above
-                                    GetFiles(str_RepoPath);
+                                    GetFiles(str_RepoPath + "/" + ProjectName);
                                     
                                     var int_modifiedCount=0;
                                     //5. For each of the files that we found, we load the txt content in memory, remove the line with lastModified date, and save them back
@@ -1405,6 +1986,144 @@
                                     }
                                     //6. Write in the script log the total number of detected files and the number of the ones that were modified.
                                     logger.warn("Total number of XML files found: "+iftbl_FileList.rows.length+" from which "+int_modifiedCount+" had a modelPersistenceProviderPackage that was removed");
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="SetIdentity">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // table: INFOTABLE dataShape: ""
+                                    var table =  me.GetConfigurationTable({
+                                    	tableName: "Configuration"
+                                    });
+                                    
+                                    var dataRow = table.getRow(0);
+                                    dataRow.User = base64DecodeString(user); // STRING
+                                    dataRow.Password = Resources.EncryptionServices.EncryptPropertyValue({ data: base64DecodeString(password) /* STRING */ }); // STRING
+                                    dataRow.CommitName = base64DecodeString(commitUser); // STRING
+                                    dataRow.BranchName = base64DecodeString(branch);
+                                    dataRow.CommitEmail = commitEmail ? base64DecodeString(commitEmail) : base64DecodeString(user); // STRING
+                                    
+                                    me.SetConfigurationTable({
+                                    	configurationTable: table /* INFOTABLE */,
+                                    	persistent: true /* BOOLEAN */,
+                                    	tableName: "Configuration" /* STRING */
+                                    });
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="SetupFromGit">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    // Result: STRING
+                                    var Result =  me.Pull({
+                                    	Force: false /* BOOLEAN */
+                                    });
+                                    pause(2000);  // Make sure pull is complete
+                                    var iftbl_ConfigurationRow = me.GetConfiguration().getRow(0);
+                                    const branch = iftbl_ConfigurationRow.InitialBranch;
+                                    me.Checkout({
+                                    	BranchNameOrCommit: branch /* STRING */
+                                    });
+                                    pause(2000);  // Make sure checkout is complete
+                                    me.ImportProjectEntities();
+                                    ]]>
+                                    </code>
+                                </Row>
+                            </Rows>
+                        </ConfigurationTable>
+                    </ConfigurationTables>
+                </ServiceImplementation>
+                <ServiceImplementation
+                 description=""
+                 handlerName="Script"
+                 name="UpdateProjectInGit">
+                    <ConfigurationTables>
+                        <ConfigurationTable
+                         dataShapeName=""
+                         description=""
+                         isMultiRow="false"
+                         name="Script"
+                         ordinal="0">
+                            <DataShape>
+                                <FieldDefinitions>
+                                    <FieldDefinition
+                                     baseType="STRING"
+                                     description="code"
+                                     name="code"
+                                     ordinal="0"></FieldDefinition>
+                                </FieldDefinitions>
+                            </DataShape>
+                            <Rows>
+                                <Row>
+                                    <code>
+                                    <![CDATA[
+                                    me.Pull({
+                                      Force: true /* BOOLEAN */
+                                    });
+                                    pause(2000);
+                                    
+                                    me.ExportProjectEntities({
+                                      includeDependents: false
+                                    });
+                                    if(!Comments) {
+                                      Comments = "Auto-Commit from ThingWorx on "+new Date().toUTCString();   
+                                    }
+                                    pause(2000);
+                                    
+                                    me.Push({
+                                      Message: Comments /* STRING */
+                                    });
                                     ]]>
                                     </code>
                                 </Row>

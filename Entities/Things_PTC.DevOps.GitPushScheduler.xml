@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Entities build="b12" majorVersion="8" minorVersion="5" modelPersistenceProviderPackage="PostgresPersistenceProviderPackage" revision="0" schemaVersion="1050" universal="">
+  <Things>
+    <Thing
+     aspect.isEditableExtensionObject="true"
+     description="This scheduler will push all of the projects one by one to their respective Git Repositories"
+     documentationContent=""
+     effectiveThingPackage="SchedulerThing"
+     enabled="true"
+     homeMashup=""
+     identifier=""
+     lastModifiedDate="2020-03-17T15:28:17.251Z"
+     name="PTC.DevOps.GitPushScheduler"
+     projectName="GitBackup"
+     published="false"
+     tags="PTC:GitUtils"
+     thingTemplate="Scheduler"
+     valueStream="">
+      <Owner name="Administrator" type="User"/>
+      <avatar/>
+      <DesignTimePermissions>
+	<Create/>
+	<Read/>
+	<Update/>
+	<Delete/>
+	<Metadata/>
+      </DesignTimePermissions>
+      <RunTimePermissions/>
+      <VisibilityPermissions>
+	<Visibility/>
+      </VisibilityPermissions>
+      <ConfigurationTableDefinitions/>
+      <ConfigurationTables>
+	<ConfigurationTable description="General Settings" isHidden="true" isMultiRow="false" name="Settings" ordinal="0">
+	  <DataShape>
+	    <FieldDefinitions>
+	      <FieldDefinition aspect.defaultValue="true" baseType="BOOLEAN" description="Automatically enable scheduler on startup" name="enabled" ordinal="0"/>
+	      <FieldDefinition baseType="USERNAME" description="User context in which to run event handlers" name="runAsUser" ordinal="0"/>
+	      <FieldDefinition aspect.defaultValue="0 0/1 * * * ?" baseType="SCHEDULE" description="Execution Schedule (Cron String)" name="schedule" ordinal="0"/>
+	    </FieldDefinitions>
+	  </DataShape>
+	  <Rows>
+	    <Row>
+	      <enabled>false
+	      </enabled>
+	      <runAsUser>
+		<![CDATA[Administrator]]>
+	      </runAsUser>
+	      <schedule>
+		<![CDATA[0 45 16 ? * MON-FRI]]>
+	      </schedule>
+	    </Row>
+	  </Rows>
+	</ConfigurationTable>
+      </ConfigurationTables>
+      <ThingShape>
+	<PropertyDefinitions/>
+	<ServiceDefinitions>
+	  <ServiceDefinition aspect.isAsync="false" category="" description="" isAllowOverride="false" isLocalOnly="false" isOpen="false" isPrivate="false" name="CommitAllGitProjects">
+	    <ResultType baseType="NOTHING" description="" name="result" ordinal="0"/>
+	    <ParameterDefinitions/>
+	  </ServiceDefinition>
+	</ServiceDefinitions>
+	<EventDefinitions/>
+	<ServiceMappings/>
+	<ServiceImplementations>
+	  <ServiceImplementation description="" handlerName="Script" name="CommitAllGitProjects">
+	    <ConfigurationTables>
+	      <ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+		<DataShape>
+		  <FieldDefinitions>
+		    <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+		  </FieldDefinitions>
+		</DataShape>
+		<Rows>
+		  <Row>
+		    <code>
+		      <![CDATA[// result: INFOTABLE dataShape: "RootEntityList"
+var gitProjectsToUpdate =  ThingTemplates["GitBackupTemplate"].QueryImplementingThings({
+	maxItems: 1000 /* NUMBER */
+});
+
+if(gitProjectsToUpdate && gitProjectsToUpdate.rows.length) {
+ 	for(var i = 0; i < gitProjectsToUpdate.rows.length; i++) {
+     	var row = gitProjectsToUpdate.rows[i];
+        if(row.name && Things[row.name]) {
+            Things[row.name].UpdateProjectInGit({
+              ProjectName: Things[row.name].GetProjectName() /* STRING */
+            });
+        }  
+    }
+}
+/*
+The following PowerShell script can be used to Invoke this externally,
+use for example as a logoff script:
+$outputFile = [Environment]::GetFolderPath("MyDocuments") + "\ToGit.out"
+$startDate = Get-Date
+$str = "GitBackup Start: "  + $startDate
+$str | out-file -Append -FilePath $OutputFile
+
+$server="localhost"
+
+$User = "Administrator"
+$PWord = ConvertTo-SecureString -String "changeme123456" -AsPlainText -Force
+$Credential = New-Object -TypeName System.Management.Automation.PSCredential -ArgumentList $User, $PWord
+
+$Uri = "http://cwatson1l2:8080/Thingworx/Things/PTC.DevOps.GitPushScheduler/Services/CommitAllGitProjects"
+echo $Uri
+Invoke-RestMethod -Method Post -Credential $Credential -ContentType application/json -Uri $Uri
+
+$endDate = Get-Date
+$str = "GitBackup End: "  + $endDate
+$str | out-file -Append -FilePath $OutputFile
+*/
+		      ]]>
+		    </code>
+		  </Row>
+		</Rows>
+	      </ConfigurationTable>
+	    </ConfigurationTables>
+	  </ServiceImplementation>
+	</ServiceImplementations>
+	<Subscriptions>
+	  <Subscription description="" enabled="true" eventName="ScheduledEvent" name="GitPushSchedulerTriggered" source="" sourceProperty="" sourceType="Thing">
+	    <ServiceImplementation description="" handlerName="Script" name="GitPushSchedulerTriggered">
+	      <ConfigurationTables>
+		<ConfigurationTable description="" isMultiRow="false" name="Script" ordinal="0">
+		  <DataShape>
+		    <FieldDefinitions>
+		      <FieldDefinition baseType="STRING" description="code" name="code" ordinal="0"/>
+		    </FieldDefinitions>
+		  </DataShape>
+		  <Rows>
+		    <Row>
+		      <code>
+			<![CDATA[ me.CommitAllGitProjects();]]>
+		      </code>
+		    </Row>
+		  </Rows>
+		</ConfigurationTable>
+	      </ConfigurationTables>
+	    </ServiceImplementation>
+	  </Subscription>
+	</Subscriptions>
+      </ThingShape>
+      <PropertyBindings/>
+      <RemotePropertyBindings/>
+      <RemoteServiceBindings/>
+      <RemoteEventBindings/>
+      <AlertConfigurations/>
+      <ImplementedShapes/>
+      <ThingProperties/>
+      <ConfigurationChanges>
+      </ConfigurationChanges>
+    </Thing>
+  </Things>
+</Entities>

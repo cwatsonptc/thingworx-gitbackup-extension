@@ -10,6 +10,7 @@ public final class Const {
 	public final static String str_CommitName = "CommitName";
 	public final static String str_CommitEmail = "CommitEmail";
 	public final static String str_RepoPathName = "RepoPathName";
+	public final static String str_NestedRepoPathName = "NestedRepoPathName";
 	public final static String str_InitialBranch = "BranchName";
 	public final static String str_DefaultProjectToExport = "DefaultExportProject";
 	public final static String str_LocalizationTokensPrefix = "LocalizationTokensPrefix";

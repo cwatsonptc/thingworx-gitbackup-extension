@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <project name="GitBackupExtension" basedir="." default="build"> 
  
-    <property name="extension.jar" value="gitbackupextension.jar" /> 
+    <property name="extension.jar" value="dts-gitbackupextension.jar" /> 
  
     <property name="target"         value="1.8" /> 
     <property name="source"         value="1.8" /> 
@@ -110,7 +110,7 @@
             <zipfileset dir="${lib.dir}" includes="**/*.jar" prefix="${package.common.lib.dir}/" excludes="**/gitextension.jar"/> 
  
         </zip> 
-        <zip destfile="${zip.dir}/GitBackupExtensionPack.zip">
+        <zip destfile="${zip.dir}/DTS_GitBackupExtensionPack.zip">
         	 <zipfileset dir="${zip.dir}" includes="*.*" />
         	 <zipfileset dir="${basedir}/3rdPartyExtensions/" includes="*.*"  />
         </zip>

@@ -107,6 +107,8 @@ import com.thingworx.types.primitives.StringPrimitive;
 				@ThingworxFieldDefinition(name = Const.str_LocalizationTokensPrefix, description = "Prefix used for exporting Localization tokens", baseType = "STRING", ordinal = 10, aspects = {
 						"friendlyName:Localization Tokens Prefix", "defaultValue:prefix" }),
 				
+				@ThingworxFieldDefinition(name = Const.str_NestedRepoPathName, description = "", baseType = "STRING", ordinal = 12, aspects = {
+						"friendlyName:Nested File Repository Path", "defaultValue:/smartparking" }),
 				
 				//,@ThingworxFieldDefinition(name = Const.str_DefaultProjectToExport, description = "", baseType = "STRING", ordinal = 8, aspects = {
 				//		"friendlyName:Default Export Project" })
@@ -121,7 +123,8 @@ public class GitBackupTemplate extends Thing {
 	// Complete git path will be calculated by concatenating the SCR absolute
 	// path and the relative path
 	private String str_User, str_Password, str_GitRepoURL, str_FileRepository, str_GlobalGitCommitName, str_GlobalGitCommitEmail,
-			str_FileRepoPath, str_CurrentBranchOrCommit,str_ProxyURL;
+			str_FileRepoPath, str_CurrentBranchOrCommit,str_ProxyURL,
+    str_NestedFileRepoPath;
 	private Integer int_ProxyPort;
 	private boolean bool_isDetachedHead = false,bool_UseProxy;
 
